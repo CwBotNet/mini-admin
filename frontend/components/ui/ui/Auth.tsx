@@ -35,9 +35,6 @@ export function Auth({ type }: {
                 withCredentials: true
             });
             const jwt = await response.data;
-
-            console.log(jwt)
-            // Cookies.set("token", jwt)
             router.push("/admin");
             return jwt
         } catch (e) {

@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { factory, statusCode } from "../utils";
-import { deleteCookie, setCookie } from "hono/cookie";
+import { setCookie } from "hono/cookie";
 
 const createMiniAdmin = factory.createHandlers(async (c) => {
   const prisma = new PrismaClient({
@@ -133,8 +133,8 @@ const updateMiniAdmin = factory.createHandlers(async (c) => {
         id: body.id,
       },
       data: {
-        name: body.name,
-        email: body.email,
+        name: body?.name,
+        email: body?.email,
         role: body.role,
       },
     });

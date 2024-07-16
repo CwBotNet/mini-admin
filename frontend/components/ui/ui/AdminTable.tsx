@@ -37,8 +37,10 @@ import axios from 'axios'
 import { BACKEND_URL } from '@/config'
 import { cookies } from 'next/headers'
 import Edit from './Edit'
+import DeleteBtn from './DeleteBtn'
 
 interface admin {
+    id?: string
     name: string
     role: string
     email: string
@@ -53,7 +55,7 @@ const AdminTable = async () => {
         }
     })
     const data = await response.data.data
-    // console.log(data)
+    console.log(data)
     return (
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
             <Tabs defaultValue="all">
@@ -80,13 +82,7 @@ const AdminTable = async () => {
                                 </DropdownMenuCheckboxItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
-
-                        <Button size="sm" className="h-7 gap-1">
-                            <PlusCircle className="h-3.5 w-3.5" />
-                            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                                <Edit type='Add' />
-                            </span>
-                        </Button>
+                        <Edit type='Add' btnVariant={'default' || ""} />
                     </div>
                 </div>
                 <TabsContent value="all">
@@ -143,13 +139,9 @@ const AdminTable = async () => {
                                                     </DropdownMenuTrigger>
                                                     <DropdownMenuContent align="end">
                                                         <DropdownMenuLabel className='text-center'>Actions</DropdownMenuLabel>
-                                                        <Button variant={"ghost"}>
-                                                            <Edit type='Edit' />
-                                                        </Button>
+                                                        <Edit type='Edit' item={item} />
                                                         <DropdownMenuItem>
-                                                            <Button variant={'ghost'} className='w-full hover:bg-red-500 hover:text-white'>
-                                                                Delete
-                                                            </Button>
+                                                            <DeleteBtn id={item?.id || ""} />
                                                         </DropdownMenuItem>
                                                     </DropdownMenuContent>
                                                 </DropdownMenu>

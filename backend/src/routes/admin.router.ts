@@ -21,7 +21,7 @@ adminRouter.get("/miniadmin/:id", ...getMiniAdminById);
 
 adminRouter.post("/miniadmin", ...createMiniAdmin);
 
-adminRouter.put("/miniadmin", ...updateMiniAdmin);
+adminRouter.put("/miniadmin/:id", ...updateMiniAdmin);
 
 adminRouter.delete("/miniadmin/:id", ...deleteMiniAdmin);
 
