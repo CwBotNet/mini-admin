@@ -55,12 +55,13 @@ const AdminTable = async () => {
         }
     })
     const data = await response.data.data
-    console.log(data)
+
     return (
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
             <Tabs defaultValue="all">
                 <div className="flex items-center">
                     <div className="ml-auto flex items-center gap-2">
+                        {/* filter function */}
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" size="sm" className="h-7 gap-1">
@@ -88,9 +89,9 @@ const AdminTable = async () => {
                 <TabsContent value="all">
                     <Card x-chunk="dashboard-06-chunk-0">
                         <CardHeader>
-                            <CardTitle>Products</CardTitle>
+                            <CardTitle>Users details</CardTitle>
                             <CardDescription>
-                                Manage your products and view their sales performance.
+                                Manage users and there role.
                             </CardDescription>
                         </CardHeader>
                         <CardContent>

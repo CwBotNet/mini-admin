@@ -30,7 +30,7 @@ import { useParams } from "next/navigation"
 
 interface Props {
     type: string,
-    btnVariant?: string,
+    btnVariant?: string | any,
     item?: {
         id?: string,
         name?: string,
@@ -48,7 +48,6 @@ export default function Edit(
         role: item?.role || ""
     })
     const [loading, setLoading] = useState(false)
-    const [toggle, setToggle] = useState(true)
 
     const sendRequest = async () => {
         try {
