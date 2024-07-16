@@ -1,10 +1,12 @@
 import { verify } from "hono/jwt";
 import { factory } from "../utils";
+import { getCookie } from "hono/cookie";
 
 const authCheck = factory.createMiddleware(async (c, next) => {
   const header = c.req.header("authorization") || "";
-
-  const user = await verify(header, c.env.JWT_SECRET);
+  const token = getCookie(c, "token")?.toString() || header.split(" ")[1];
+  console.log(token);
+  const user = await verify(token, c.env.JWT_SECRET);
   if (!user) {
     c.status(403);
     return c.json({ error: "not a valid token" });

@@ -3,6 +3,12 @@ import { withAccelerate } from "@prisma/extension-accelerate";
 import { factory, statusCode } from "../utils";
 import { sign } from "hono/jwt";
 import bcrypt from "bcryptjs";
+import { setCookie } from "hono/cookie";
+
+const options = {
+  httpOnly: true,
+  secure: true,
+};
 
 // signup hanndler
 
@@ -10,15 +16,15 @@ const signUpUser = factory.createHandlers(async (c) => {
   //   connect to the db
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
-  }).$extends(withAccelerate());
-
-  const body = await c.req.json();
+  });
   try {
     if (!prisma) {
       return c.json({
         error: "prisma client connection faild not found",
       });
     }
+
+    const body = await c.req.json();
 
     // password encryption before user signup
     const saltRounds = bcrypt.genSaltSync(10);
@@ -32,13 +38,25 @@ const signUpUser = factory.createHandlers(async (c) => {
       },
     });
 
+    if (!user) {
+      return c.json(
+        {
+          failed: "email already exist",
+        },
+        statusCode.BAD_REQUEST
+      );
+    }
+
     // generate token
     const jwtToken = await sign({ id: user.id }, c.env.JWT_SECRET);
+
+    // set auth cookie
+    setCookie(c, "token", jwtToken, options);
     return c.json({
       token: jwtToken,
+      status: "created sussessful",
     });
   } catch (e: any) {
-    console.log(e);
     c.status(statusCode.INTERNAL_SERVER_ERROR);
     return c.json({ error: e.message });
   }
@@ -80,12 +98,16 @@ const signInUser = factory.createHandlers(async (c) => {
 
     console.log({ passCheck: passCheck });
 
-    const userVerify = await sign({ id: user.id }, c.env.JWT_SECRET);
-    if (!userVerify) {
+    const accessToken = await sign({ id: user.id }, c.env.JWT_SECRET);
+
+    // setCookie
+    setCookie(c, "token", accessToken, options);
+
+    if (!accessToken) {
       c.status(403);
       return c.json({ error: "not verified user" });
     }
-    return c.text(userVerify);
+    return c.text(accessToken);
   } catch (error: any) {
     console.log(error.message);
     c.status(403);

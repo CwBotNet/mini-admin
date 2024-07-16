@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { factory, statusCode } from "../utils";
+import { deleteCookie, setCookie } from "hono/cookie";
 
 const createMiniAdmin = factory.createHandlers(async (c) => {
   const prisma = new PrismaClient({
@@ -59,6 +60,9 @@ const getMiniAdmin = factory.createHandlers(async (c) => {
 
     if (!miniAdmin) {
       c.status(statusCode.NOT_FOUND);
+      return c.json({
+        error: "mini admin not found",
+      });
     }
 
     return c.json(
@@ -141,6 +145,11 @@ const updateMiniAdmin = factory.createHandlers(async (c) => {
         error: "mini admin not found",
       });
     }
+
+    return c.json({
+      message: "mini admin updated successfully",
+      data: miniAdminUpdate,
+    });
   } catch (error) {
     console.log(error);
     c.status(statusCode.INTERNAL_SERVER_ERROR);
@@ -184,4 +193,21 @@ const deleteMiniAdmin = factory.createHandlers(async (c) => {
   } catch (error) {}
 });
 
-export { createMiniAdmin, deleteMiniAdmin, getMiniAdmin, updateMiniAdmin };
+const logOut = factory.createHandlers(async (c) => {
+  try {
+    setCookie(c, "token", "");
+    return c.json({ message: "logout successfully" }, statusCode.Ok);
+  } catch (e: any) {
+    c.status(statusCode.INTERNAL_SERVER_ERROR);
+    return c.json({ error: e.message });
+  }
+});
+
+export {
+  createMiniAdmin,
+  deleteMiniAdmin,
+  getMiniAdmin,
+  updateMiniAdmin,
+  getMiniAdminById,
+  logOut,
+};

@@ -1,2 +1,2 @@
 export * from "./user.handler";
-// export * from "./admin.handler";
+export * from "./admin.handler";
