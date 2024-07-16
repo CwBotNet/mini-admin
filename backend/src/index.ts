@@ -8,14 +8,14 @@ const app = new Hono<{
 }>().basePath("/api/v1");
 
 app.use(
-  "/*",
+  "*",
   cors({
     credentials: true,
     origin: [
-      "http://localhost:3000",
       "https://mini-admin-pi.vercel.app/",
       "https://mini-admin-git-main-raj-sahanis-projects.vercel.app/",
       "https://mini-admin-8n4k2ibh4-raj-sahanis-projects.vercel.app/",
+      "http://localhost:3000",
     ],
   })
 );
