@@ -50,11 +50,9 @@ interface admin {
 const AdminTable = async () => {
     const response = await axios.get(`${BACKEND_URL}/admin/miniadmin`, {
         withCredentials: true,
-        headers: {
-            Authorization: `Bearer ${cookies().get("token")?.value}`
-        }
     })
     const data = await response.data.data
+    console.log(cookies().get("token"))
 
     return (
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">

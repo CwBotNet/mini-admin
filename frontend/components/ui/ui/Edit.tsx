@@ -22,10 +22,9 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { PlusCircle } from "lucide-react"
-import { useCallback, useEffect, useState } from "react"
+import { useState } from "react"
 import { BACKEND_URL } from "@/config"
 import axios from "axios"
-import { useParams } from "next/navigation"
 
 
 interface Props {

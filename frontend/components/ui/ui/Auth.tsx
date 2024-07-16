@@ -32,15 +32,16 @@ export function Auth({ type }: {
     const sendRequest = async () => {
         try {
             const response = await axios.post(`${BACKEND_URL}/user/${type === "signup" ? "signup" : "signin"}`, userInputs, {
-                withCredentials: true
+                withCredentials: true,
             });
             const jwt = await response.data;
-            router.push("/admin");
-            return jwt
+
+            return router.push("/admin");
         } catch (e) {
             console.log(e)
         }
     }
+
     return (
         <Card className="mx-auto max-w-sm">
             <CardHeader>
