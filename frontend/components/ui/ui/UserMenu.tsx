@@ -10,7 +10,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from '../button'
-import { cookies } from "next/headers"
+import Cookies from "js-cookie"
 import { useRouter } from 'next/navigation'
 import { logOut } from "@/helper"
 import axios from "axios"
@@ -39,6 +39,7 @@ const UserMenu = () => {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={async () => {
                     axios.get(`${BACKEND_URL}/admin/logout`, { withCredentials: true }).then(() => {
+                        Cookies.remove("token");
                         router.push("/")
                     })
                 }}>Logout</DropdownMenuItem >

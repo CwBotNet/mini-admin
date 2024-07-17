@@ -52,14 +52,14 @@ const AdminTable = async () => {
         withCredentials: true,
 
         headers: {
-            'Accept': '*/*',
+            // 'Accept': '*/*',
             'Authorization': `${cookies().get("token")?.value}`,
             "cookie": `token=${cookies().get("token")?.value}`
         }
     })
     const data = await response.data.data
 
-    console.log(data)
+    // console.log(data)
 
     return (
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">

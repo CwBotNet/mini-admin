@@ -4,6 +4,7 @@ import { factory, statusCode } from "../utils";
 import { sign } from "hono/jwt";
 import bcrypt from "bcryptjs";
 import Cookies from "js-cookie";
+import { deleteCookie, setCookie } from "hono/cookie";
 
 const options = {
   httpOnly: true,
@@ -51,6 +52,7 @@ const signUpUser = factory.createHandlers(async (c) => {
     const jwtToken = await sign({ id: user.id }, c.env.JWT_SECRET);
 
     // set auth cookie
+    setCookie(c, "token", jwtToken);
     Cookies.set("token", jwtToken);
     return c.json({
       token: jwtToken,
@@ -101,6 +103,7 @@ const signInUser = factory.createHandlers(async (c) => {
     const accessToken = await sign({ id: user.id }, c.env.JWT_SECRET);
 
     // setCookie
+    setCookie(c, "token", accessToken);
     Cookies.set("token", accessToken);
 
     if (!accessToken) {

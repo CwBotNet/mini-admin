@@ -6,6 +6,7 @@ import {
   getMiniAdmin,
   getMiniAdminById,
   logOut,
+  queryAdmin,
   updateMiniAdmin,
 } from "../handlers/admin.handler";
 
@@ -26,5 +27,6 @@ adminRouter.put("/miniadmin/:id", ...updateMiniAdmin);
 adminRouter.delete("/miniadmin/:id", ...deleteMiniAdmin);
 
 adminRouter.get("/logout", ...logOut);
+adminRouter.get("/query", ...queryAdmin);
 
 export { adminRouter };
