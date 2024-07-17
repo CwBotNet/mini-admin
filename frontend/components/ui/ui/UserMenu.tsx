@@ -28,6 +28,7 @@ const UserMenu = () => {
                     size="icon"
                     className="overflow-hidden rounded-full"
                 >
+                    U
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
