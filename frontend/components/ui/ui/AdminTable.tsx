@@ -48,14 +48,17 @@ interface admin {
 }
 
 const AdminTable = async () => {
-    const response = await fetch(`${BACKEND_URL}/admin/miniadmin`, {
-        cache: "no-cache",
+    const response = await axios.get(`${BACKEND_URL}/admin/miniadmin`, {
+        withCredentials: true,
+
         headers: {
+            'Accept': '*/*',
+            'Authorization': `${cookies().get("token")?.value}`,
             "cookie": `token=${cookies().get("token")?.value}`
         }
     })
-    const res = await response.json()
-    const data = res.data
+    const data = await response.data.data
+
     console.log(data)
 
     return (

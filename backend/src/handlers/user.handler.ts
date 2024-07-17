@@ -3,7 +3,7 @@ import { withAccelerate } from "@prisma/extension-accelerate";
 import { factory, statusCode } from "../utils";
 import { sign } from "hono/jwt";
 import bcrypt from "bcryptjs";
-import { setCookie } from "hono/cookie";
+import Cookies from "js-cookie";
 
 const options = {
   httpOnly: true,
@@ -51,7 +51,7 @@ const signUpUser = factory.createHandlers(async (c) => {
     const jwtToken = await sign({ id: user.id }, c.env.JWT_SECRET);
 
     // set auth cookie
-    setCookie(c, "token", jwtToken, options);
+    Cookies.set("token", jwtToken);
     return c.json({
       token: jwtToken,
       status: "created sussessful",
@@ -101,7 +101,7 @@ const signInUser = factory.createHandlers(async (c) => {
     const accessToken = await sign({ id: user.id }, c.env.JWT_SECRET);
 
     // setCookie
-    setCookie(c, "token", accessToken, options);
+    Cookies.set("token", accessToken);
 
     if (!accessToken) {
       c.status(403);

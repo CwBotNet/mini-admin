@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { factory, statusCode } from "../utils";
-import { deleteCookie, setCookie } from "hono/cookie";
+import Cookies from "js-cookie";
 
 const createMiniAdmin = factory.createHandlers(async (c) => {
   const prisma = new PrismaClient({
@@ -195,7 +195,7 @@ const deleteMiniAdmin = factory.createHandlers(async (c) => {
 
 const logOut = factory.createHandlers(async (c) => {
   try {
-    deleteCookie(c, "token");
+    Cookies.remove("token");
     return c.json({ message: "logout successfully" }, statusCode.Ok);
   } catch (e: any) {
     c.status(statusCode.INTERNAL_SERVER_ERROR);

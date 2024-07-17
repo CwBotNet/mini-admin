@@ -12,7 +12,7 @@ import {
 const adminRouter = new Hono();
 
 // middleware
-adminRouter.use("/*", authCheck);
+// adminRouter.use("/*", authCheck);
 
 // handler routes
 adminRouter.get("/miniadmin", ...getMiniAdmin);

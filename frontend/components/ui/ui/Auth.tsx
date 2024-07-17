@@ -15,7 +15,8 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { BACKEND_URL } from "@/config"
 import axios from "axios"
-import { cookies } from "next/headers"
+import Cookies from "js-cookie"
+
 
 export function Auth({ type }: {
     type: "signin" | "signup"
@@ -31,12 +32,11 @@ export function Auth({ type }: {
 
     const sendRequest = async () => {
         try {
-            const response = await axios.post(`${BACKEND_URL}/user/${type === "signup" ? "signup" : "signin"}`, userInputs, {
-                withCredentials: true,
-            });
+            const response = await axios.post(`${BACKEND_URL}/user/${type === "signup" ? "signup" : "signin"}`, userInputs);
             const jwt = await response.data;
-
+            Cookies.set("token", jwt, { secure: true, expires: 3 })
             return router.push("/admin");
+
         } catch (e) {
             console.log(e)
         }

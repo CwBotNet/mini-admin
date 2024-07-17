@@ -25,6 +25,8 @@ import { PlusCircle } from "lucide-react"
 import { useState } from "react"
 import { BACKEND_URL } from "@/config"
 import axios from "axios"
+import cookies from "js-cookie"
+import { useRouter } from "next/navigation"
 
 
 interface Props {
@@ -47,7 +49,7 @@ export default function Edit(
         role: item?.role || ""
     })
     const [loading, setLoading] = useState(false)
-
+    const router = useRouter()
     const sendRequest = async () => {
         try {
 
@@ -55,23 +57,37 @@ export default function Edit(
                 setLoading(true)
                 const response = await axios.post(`${BACKEND_URL}/admin/miniadmin`, userInput, {
                     withCredentials: true,
+                    headers: {
+                        'Accept': '*/*',
+                        'Authorization': `${cookies.get("token")}`,
+                        "cookie": `token=${cookies.get("token")}`
+                    }
                 });
                 setLoading(false)
+                router.refresh()
                 return response.data.data
             }
             setLoading(true)
             const response = await axios.put(`${BACKEND_URL}/admin/miniadmin/${item?.id}`, userInput, {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    'Accept': '*/*',
+                    'Authorization': `${cookies.get("token")}`,
+                    "cookie": `token=${cookies.get("token")}`
+                }
             });
             setLoading(false)
+            router.refresh()
             return response.data.data
 
-        } catch (e) {
-            console.log(e)
+        } catch (e: any) {
+            console.log(e.message)
+            return e.message
         }
 
     }
 
+    // console.log(cookies.get("token"))
 
 
     return (
