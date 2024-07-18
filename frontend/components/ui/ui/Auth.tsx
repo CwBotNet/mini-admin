@@ -22,7 +22,7 @@ export function Auth({ type }: {
     type: "signin" | "signup"
 }) {
     const router = useRouter();
-
+    const [loading, setLoading] = useState(false)
     const [userInputs, setUserInputs] = useState({
         name: "",
         email: "",
@@ -32,11 +32,15 @@ export function Auth({ type }: {
 
     const sendRequest = async () => {
         try {
+            setLoading(true)
             const response = await axios.post(`${BACKEND_URL}/user/${type === "signup" ? "signup" : "signin"}`, userInputs);
-            const jwt = await response.data;
-            Cookies.set("token", jwt, { secure: true, expires: 3 })
-            return router.push("/admin");
-
+            if (response) {
+                const jwt = await response.data;
+                Cookies.set("token", jwt, { secure: true, expires: 3 })
+                return router.push("/admin");
+            }
+            setLoading(false)
+            alert("somthing went wrong!")
         } catch (e) {
             console.log(e)
         }
@@ -82,9 +86,12 @@ export function Auth({ type }: {
                         </div>
                         <Input id="password" type="password" required onChange={(e) => setUserInputs({ ...userInputs, password: e.target.value })} />
                     </div>
-                    <Button type="submit" className="w-full" onClick={sendRequest}>
-                        {type === "signin" ? "Sign in" : "Sign up"}
-                    </Button>
+                    {
+                        loading ? <Button variant={"default"}>{type === "signin" ? "signing..." : "Creating..."}</Button> :
+                            <Button type="submit" className="w-full" onClick={sendRequest}>
+                                {type === "signin" ? "Sign in" : "Sign up"}
+                            </Button>
+                    }
                 </div>
                 <div className="mt-4 text-center text-sm">
                     Don&apos;t have an account?{" "}
